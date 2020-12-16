@@ -1,23 +1,19 @@
-import Vue from './vue.esm.browser.js';
+import Vue from './vue.esm.browser.js'
 
-/** URL адрес API */
-const API_URL = 'https://course-vue.javascript.ru/api';
+const API_URL = 'https://course-vue.javascript.ru/api'
+const MEETUP_ID = 6
 
-/** ID митапа для примера; используйте его при получении митапа */
-const MEETUP_ID = 6;
-
-/**
- * Возвращает ссылку на изображение митапа для митапа
- * @param meetup - объект с описанием митапа (и параметром meetupId)
- * @return {string} - ссылка на изображение митапа
- */
-function getMeetupCoverLink(meetup) {
-  return `${API_URL}/images/${meetup.imageId}`;
+const  getMeetupCoverLink = meetup => {
+  return `${API_URL}/images/${meetup.imageId}`
 }
 
-/**
- * Словарь заголовков по умолчанию для всех типов элементов программы
- */
+const getDateOnlyString = date => {
+  const YYYY = date.getUTCFullYear()
+  const MM = (date.getUTCMonth() + 1).toString().padStart(2, '0')
+  const DD = date.getUTCDate().toString().padStart(2, '0')
+  return `${YYYY}-${MM}-${DD}`
+}
+
 const agendaItemTitles = {
   registration: 'Регистрация',
   opening: 'Открытие',
@@ -27,12 +23,8 @@ const agendaItemTitles = {
   afterparty: 'Afterparty',
   talk: 'Доклад',
   other: 'Другое',
-};
+}
 
-/**
- * Словарь иконок для для всех типов элементов программы.
- * Соответствует имени иконок в директории /assets/icons
- */
 const agendaItemIcons = {
   registration: 'key',
   opening: 'cal-sm',
@@ -42,25 +34,46 @@ const agendaItemIcons = {
   closing: 'key',
   afterparty: 'cal-sm',
   other: 'cal-sm',
-};
+}
+
 
 export const app = new Vue({
   el: '#app',
 
   data: {
-    //
+    rawMeetup: {}
   },
 
-  mounted() {
-    // Требуется получить данные митапа с API
+  async mounted() {
+    this.rawMeetup = await this.getMeetup()
   },
 
   computed: {
-    //
+    meetup() {
+      return {
+        ...this.rawMeetup,
+        coverStyle: this.rawMeetup.imageId
+          ? { '--bg-url': `url('${getMeetupCoverLink(this.rawMeetup)}')` }
+          : {},
+        localDate: new Date(this.rawMeetup.date).toLocaleString(navigator.language, {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }),
+        dateOnlyString: getDateOnlyString(new Date(this.rawMeetup.date)),
+        agenda: this.rawMeetup.agenda ? this.rawMeetup.agenda.map(agenda => ({
+          ...agenda,
+          iconType: agendaItemIcons[agenda.type],
+          defaultTitle: agendaItemTitles[agenda.type]
+        })) : []
+      }
+    }
   },
 
   methods: {
-    // Получение данных с API предпочтительнее оформить отдельным методом,
-    // а не писать прямо в mounted()
+    getMeetup() {
+      return fetch(`${API_URL}/meetups/${MEETUP_ID}`)
+        .then(res => res.json())
+    }
   },
-});
+})
