@@ -41,7 +41,7 @@ export const app = new Vue({
   el: '#app',
 
   data: {
-    rawMeetup: {}
+    rawMeetup: null
   },
 
   async mounted() {
@@ -50,6 +50,8 @@ export const app = new Vue({
 
   computed: {
     meetup() {
+      if(!this.rawMeetup) { return null }
+
       return {
         ...this.rawMeetup,
         coverStyle: this.rawMeetup.imageId
