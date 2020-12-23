@@ -57,7 +57,9 @@ export const MeetupsCalendar = {
 
   computed: {
     currentLocalDate() {
-      return this.date.toLocaleString(navigator.language, { year: 'numeric', month: 'long' })
+      let localMonthDate = this.date.toLocaleString(navigator.language, { month: 'long' })
+
+      return `${localMonthDate} ${this.yearNum}`
     },
     monthNum() {
       return this.date.getMonth()
