@@ -35,7 +35,6 @@ export const MeetupsCalendar = {
           {{ calendarDay.day }}
           <a v-for="event in calendarDay.events" class="rangepicker__event">
             {{ event.title }}
-            {{ event.place }}
           </a>
         </div>
       </div>
