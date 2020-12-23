@@ -17,7 +17,7 @@ export const CounterButton = {
 
   methods: {
     increment() {
-      this.$emit('increment', this.$props.count + 1)
+      this.$emit('increment', this.count + 1)
     }
   }
 }
