@@ -1,6 +1,5 @@
 const FIRST_MONTH = 0
 const LAST_MONTH = 11
-const CELL_COUNT_LENGTH = 35
 
 const getDaysInMonth = (month, year) => {
   const date = new Date(year, month, 1)
@@ -17,6 +16,8 @@ const getDaysInMonth = (month, year) => {
 
   return days
 }
+
+const getDay = date => new Date(date).getDay()
 
 export const MeetupsCalendar = {
   name: 'MeetupsCalendar',
@@ -99,11 +100,35 @@ export const MeetupsCalendar = {
       let prevMonthDays = this.monthNum === FIRST_MONTH
         ? getDaysInMonth(LAST_MONTH, this.yearNum - 1)
         : getDaysInMonth(this.monthNum - 1, this.yearNum)
-      let restDays = prevMonthDays
-        .splice(currentMonthDays.length - CELL_COUNT_LENGTH)
-        .map(i => ({ ...i, inactive: true }))
+      let nextMonthDays = this.monthNum === LAST_MONTH
+        ? getDaysInMonth(FIRST_MONTH, this.yearNum + 1)
+        : getDaysInMonth(this.monthNum + 1, this.yearNum)
+      
+      let allDays = []
+      let firstWeekDay = getDay(currentMonthDays[0].date)
+      let lastWeekDay = getDay(currentMonthDays[currentMonthDays.length - 1].date)
 
-      return [...restDays, ...currentMonthDays]
+      if (firstWeekDay === 1 && lastWeekDay === 0) { return currentMonthDays }
+
+      if (firstWeekDay !== 1) {
+        allDays = prevMonthDays
+          .splice(firstWeekDay === 0 ? -6 : -(firstWeekDay - 1))
+          .map(i => ({ ...i, inactive: true }))
+      }
+
+      allDays = [...allDays, ...currentMonthDays]
+
+      let lastAllDays = getDay(allDays[allDays.length - 1].date)
+
+      if (lastAllDays !== 0) {
+        let daysAfter = nextMonthDays
+          .splice(0, 7 - lastAllDays)
+          .map(i => ({ ...i, inactive: true }))
+
+        allDays = [...allDays, ...daysAfter]
+      }
+
+      return allDays
     },
   }
 }
