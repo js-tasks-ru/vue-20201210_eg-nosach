@@ -50,8 +50,10 @@ export const MeetupsCalendar = {
   },
 
   data() {
+    let currentDate = new Date()
+
     return {
-      date: new Date()
+      date: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)
     }
   },
 
