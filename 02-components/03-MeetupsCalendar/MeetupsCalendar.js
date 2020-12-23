@@ -86,23 +86,11 @@ export const MeetupsCalendar = {
 
   methods: {
     nextMonth() {
-      if (this.monthNum === LAST_MONTH) {
-        this.date.setMonth(FIRST_MONTH)
-        this.date.setYear(this.yearNum + 1)
-      } else {
-        this.date.setMonth(this.monthNum + 1)
-      }
-
+      this.date.setMonth(this.monthNum + 1)
       this.date = new Date(this.date)
     },
     prevMonth() {
-      if (this.monthNum === FIRST_MONTH) {
-        this.date.setMonth(LAST_MONTH)
-        this.date.setYear(this.yearNum - 1)
-      } else {
-        this.date.setMonth(this.monthNum - 1)
-      }
-
+      this.date.setMonth(this.monthNum - 1)
       this.date = new Date(this.date)
     },
     createCalendarDays() {
