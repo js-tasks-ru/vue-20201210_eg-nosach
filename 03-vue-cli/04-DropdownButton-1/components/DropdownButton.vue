@@ -62,7 +62,7 @@ export default {
       return this.options.find(i => i.icon)
     },
     buttonText() {
-      return this.title + (this.selected && this.selected.value ? ` - ${this.selected.value}` : '')
+      return this.title + (this.selected && this.selected.text ? ` - ${this.selected.text}` : '')
     },
     defaultValue() {
       return this.value
