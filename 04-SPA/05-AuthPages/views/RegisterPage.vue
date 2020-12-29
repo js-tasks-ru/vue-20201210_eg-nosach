@@ -93,7 +93,6 @@ export default {
               alert(res.id)
             }
           })
-          .catch(e => {console.log(e)})
       }
     }
   }
