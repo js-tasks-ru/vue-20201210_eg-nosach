@@ -7,7 +7,11 @@
   </div>
 </template>
 
-<script></script>
+<script>
+  export default {
+    name: 'NotFoundPage'
+  }
+</script>
 
 <style scoped>
 .page.page_404 {
