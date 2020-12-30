@@ -16,64 +16,61 @@ export default {
   name: 'PageWithQuery',
   components: { MeetupsView },
 
+  defaultData: {
+    view: 'list',
+    date: 'all',
+    participation: 'all',
+    search: ''
+  },
+
   data() {
     return {
-      view: 'list',
-      date: 'all',
-      participation: 'all',
-      search: ''
+      view: this.$options.defaultData.view,
+      date: this.$options.defaultData.date,
+      participation: this.$options.defaultData.participation,
+      search: this.$options.defaultData.search
     }
   },
 
   created() {
-    this.setDefaultData()
-    this.getFromRoute()
-    this.setToRoute()
+    this.getRouteValues()
+    this.setRouteValues()
   },
 
   watch: {
     $route() {
-      this.getFromRoute()
+      this.getRouteValues()
     },
     view(v) {
-      this.setToRoute({ view: v })
+      this.setRouteValues({ view: v })
     },
     date(v) {
-      this.setToRoute({ date: v })
+      this.setRouteValues({ date: v })
     },
     participation(v) {
-      this.setToRoute({ participation: v })
+      this.setRouteValues({ participation: v })
     },
     search(v) {
-      this.setToRoute({ search: v })
+      this.setRouteValues({ search: v })
     },
   },
 
   methods: {
-    removeDefaultParams(q) {
+    clearDefaultParams(q) {
       return Object.keys(q).reduce((acc, i) => (
         q[i] !== this.$options.defaultData[i]
           ? { ...acc, [i]: q[i] }
           : acc
       ), {})
     },
-    setDefaultData() {
-      this.$options.defaultData = {
-        view: this.view,
-        date: this.date,
-        participation: this.participation,
-        search: this.search
-      }
-    },
-    getFromRoute() {
+    getRouteValues() {
       this.view = this.$route.query.view || this.view
       this.date = this.$route.query.date || this.date
       this.participation = this.$route.query.participation || this.participation
       this.search = this.$route.query.search || this.search
     },
-    setToRoute(v = {}) {
-      let query = this.removeDefaultParams({ ...this.$route.query, ...v })
-
+    setRouteValues(v = {}) {
+      let query = this.clearDefaultParams({ ...this.$route.query, ...v })
       this.$router.push({ query })
     }
   }
