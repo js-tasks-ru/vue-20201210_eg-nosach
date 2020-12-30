@@ -54,17 +54,17 @@ export default {
 
   computed: {
     isPasswordConfirm() {
-      return parseInt(this.password) === parseInt(this.confirmPassword)
+      return this.password === this.confirmPassword
     }
   },
 
   methods: {
     validateForm() {
       return this.email === ''
-      || this.password === ''
       || this.fullname === ''
-      || !this.isAgree
+      || this.password === ''
       || !this.isPasswordConfirm
+      || !this.isAgree
     },
     showAlertMessage() {
       if (this.email === '') {
