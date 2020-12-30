@@ -71,7 +71,11 @@ export default {
     },
     setRouteValues(v = {}) {
       let query = this.clearDefaultParams({ ...this.$route.query, ...v })
-      this.$router.push({ query })
+      this.$router.push({ query }).catch(err => {
+        if (err.name !== 'NavigationDuplicated') {
+          throw err
+        }
+      })
     }
   }
 };
