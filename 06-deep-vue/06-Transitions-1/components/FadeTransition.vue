@@ -1,4 +1,8 @@
-<template></template>
+<template>
+  <transition name="fade" mode="out-in">
+    <slot name="default" />
+  </transition>
+</template>
 
 <script>
 export default {
