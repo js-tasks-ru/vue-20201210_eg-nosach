@@ -1,6 +1,6 @@
 <template>
   <main>
-    <messages-list class="messages" :messages="messages" />
+    <messages-list ref="list" class="messages" :messages="messages" />
     <form @submit.prevent="send" style="display: flex;">
       <input type="text" placeholder="New message" v-model="newMessage" />
       <button>Send</button>
@@ -37,6 +37,10 @@ export default {
         text: this.newMessage,
       });
       this.newMessage = '';
+      this.$nextTick(function() {
+        let listEl = this.$refs.list.$el
+        listEl.scrollTop = listEl.scrollHeight - listEl.clientHeight
+      })
     },
   },
 };
