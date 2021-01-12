@@ -1,6 +1,32 @@
 <script>
 export default {
   name: 'FadeTransitionGroup',
+
+  computed: {
+    slots_() {
+      return this.$slots.default.map(
+        i => ({ ...i, data: {...i.data, class: {...i.data.class, 'fade-list-item': true }} })
+      )
+    }
+  },
+
+  render(h) {
+    return h(
+      'transition-group',
+      {
+        props: {
+          name: 'fade-list'
+        },
+        class: {
+          'fade-list': true
+        },
+        attrs: {
+          ...this.$attrs
+        }
+      },
+      this.slots_
+    )
+  }
 };
 </script>
 
