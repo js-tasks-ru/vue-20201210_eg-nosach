@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <meetups-view
-      :view.sync="view"
-      :date.sync="date"
-      :participation.sync="participation"
-      :search.sync="search"
+      :view.sync="data.view"
+      :date.sync="data.date"
+      :participation.sync="data.participation"
+      :search.sync="data.search"
     />
   </div>
 </template>
@@ -25,37 +25,43 @@ export default {
 
   data() {
     return {
-      view: this.$options.defaultData.view,
-      date: this.$options.defaultData.date,
-      participation: this.$options.defaultData.participation,
-      search: this.$options.defaultData.search
+      data: this.initialRouteData()
     }
-  },
-
-  created() {
-    this.getRouteValues()
-    this.setRouteValues()
   },
 
   watch: {
     $route() {
       this.getRouteValues()
     },
-    view(v) {
-      this.setRouteValues({ view: v })
-    },
-    date(v) {
-      this.setRouteValues({ date: v })
-    },
-    participation(v) {
-      this.setRouteValues({ participation: v })
-    },
-    search(v) {
-      this.setRouteValues({ search: v })
-    },
+    data: {
+      deep: true,
+      immediate: true,
+      handler(v) {
+        this.setRouteValues(v)
+      }
+    }
   },
 
   methods: {
+    initialRouteData() {
+      let query = this.$route.query
+      let defaultData = this.$options.defaultData
+
+      return {
+        view: query.view || defaultData.view,
+        date: query.date || defaultData.date,
+        participation: query.participation || defaultData.participation,
+        search: query.search || defaultData.search
+      }
+    },
+    getRouteValues() {
+      let query = this.$route.query
+
+      this.data.view = query.view || this.data.view
+      this.data.date = query.date || this.data.date
+      this.data.participation = query.participation || this.data.participation
+      this.data.search = query.search || this.data.search
+    },
     clearDefaultParams(q) {
       return Object.keys(q).reduce((acc, i) => (
         q[i] !== this.$options.defaultData[i]
@@ -63,15 +69,9 @@ export default {
           : acc
       ), {})
     },
-    getRouteValues() {
-      this.view = this.$route.query.view || this.view
-      this.date = this.$route.query.date || this.date
-      this.participation = this.$route.query.participation || this.participation
-      this.search = this.$route.query.search || this.search
-    },
     setRouteValues(v = {}) {
       let query = this.clearDefaultParams({ ...this.$route.query, ...v })
-      this.$router.push({ query }).catch(err => {
+      this.$router.replace({ query }).catch(err => {
         if (err.name !== 'NavigationDuplicated') {
           throw err
         }
