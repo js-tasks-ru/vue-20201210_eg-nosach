@@ -82,7 +82,7 @@ export default {
         input: v => {
           let date = new Date(v)
 
-          this.$emit('update.valueAsDate', +date)
+          this.$emit('update:valueAsDate', +date)
           this.$emit('update:valueAsDate', date)
           this.$emit('input', v)
         },
