@@ -1,7 +1,8 @@
 <template>
   <AppInput
     :type="type"
-    v-on="listeners"
+    v-on="$listeners"
+    @input.native="handleInput"
     :value="inputValue"
     v-bind="attrs"
   >
@@ -33,7 +34,7 @@ export default {
     valueAsDate: {
       type: Date
     },
-    value: {},
+    value: {}
   },
 
   model: {
@@ -75,18 +76,14 @@ export default {
     },
     attrs() {
       return { ...this.$attrs, ...this.$props }
-    },
-    listeners() {
-      return {
-        ...this.$listeners,
-        input: v => {
-          let date = new Date(v)
+    }
+  },
 
-          this.$emit('update:valueAsDate', +date)
-          this.$emit('update:valueAsDate', date)
-          this.$emit('input', v)
-        },
-      }
+  methods: {
+    handleInput(e) {
+      this.$emit('update:valueAsNumber', e.target.valueAsNumber)
+      this.$emit('update:valueAsDate', new Date(e.target.valueAsNumber))
+      this.$emit('input', e.target.value)
     }
   }
 };
