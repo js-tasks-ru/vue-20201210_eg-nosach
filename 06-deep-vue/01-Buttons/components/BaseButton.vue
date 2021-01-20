@@ -1,3 +1,15 @@
+<template>
+  <component
+    :is="this.tag"
+    class="button"
+    :class="{ 'button_block': block }"
+    v-on="$listeners"
+    v-bind="$attrs"
+  >
+    <slot />
+  </component>
+</template>
+
 <script>
 export default {
   name: 'BaseButton',
@@ -13,27 +25,7 @@ export default {
         return ['button', 'a', 'router-link'].includes(v)
       }
     }
-  },
-
-  render(h) {
-    return h(
-      this.tag,
-      {
-        class: {
-          'button': true,
-          'button_block': this.block
-        },
-        attrs: {
-          ...this.$attrs
-        },
-        on: {
-          ...this.$listeners
-        }
-      },
-      this.$slots.default
-    )
   }
-
 };
 </script>
 
