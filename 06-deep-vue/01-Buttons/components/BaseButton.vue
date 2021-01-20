@@ -1,6 +1,6 @@
 <template>
   <component
-    :is="this.tag"
+    :is="tag"
     class="button"
     :class="{ 'button_block': block }"
     v-on="$listeners"
