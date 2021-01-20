@@ -10,7 +10,7 @@ export default {
       type: String,
       default: 'button',
       validator: v => {
-        return ['button', 'a', 'router-link'].indexOf(v) !== -1
+        return ['button', 'a', 'router-link'].includes(v)
       }
     }
   },
